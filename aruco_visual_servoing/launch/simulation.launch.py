@@ -66,9 +66,27 @@ def generate_launch_description():
         ]
     )
 
+    # Get the path to the ROS-GZ bridge config file
+    ros_gz_bridge_config = os.path.join(
+        pkg_aruco_visual_servoing,
+        'config',
+        'ros_gz_bridge.yaml'
+    )
+
+    # Bridge ROS and Gazebo topics
+    start_gazebo_ros_bridge_cmd = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        parameters=[{
+            'config_file': ros_gz_bridge_config,
+        }],
+        output='screen'
+    )
+    
     return LaunchDescription([
         robot_state_publisher,
         gazebo,
         rviz,
-        spawn
+        spawn, 
+        start_gazebo_ros_bridge_cmd
     ])
