@@ -141,6 +141,27 @@
     </inertial>
   </link>
 
+  <!-- Camera -->
+  <link name="camera_link">
+    <visual>
+      <geometry>
+        <box size="0.2 0.2 0.2"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.2 0.2 0.2"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <mass value="0.1"/>
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/>
+    </inertial>
+  </link>
+  
+  <link name="camera_link_optical"/>
+
   <!-- Joints -->
   <joint name="left_wheel_joint" type="continuous">
     <parent link="base_link"/>
@@ -162,6 +183,18 @@
     <parent link="base_link"/>
     <child link="caster"/>
     <origin xyz="0.8 0 -0.2" rpy="0 0 0"/>
+  </joint>
+
+  <joint name="camera_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_link"/>
+    <origin xyz="0.9 0 0.36" rpy="0 0 0"/>
+  </joint>
+
+  <joint type="fixed" name="camera_optical_joint">
+    <origin xyz="0 0 0" rpy="-${PI/2} 0 -${PI/2}"/>
+    <child link="camera_link_optical"/>
+    <parent link="camera_link"/>
   </joint>
 
 </robot>

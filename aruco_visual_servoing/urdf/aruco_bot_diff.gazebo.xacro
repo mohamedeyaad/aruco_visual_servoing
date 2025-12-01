@@ -33,14 +33,18 @@
         <child_frame_id>base_footprint</child_frame_id>
         <odom_publish_frequency>30</odom_publish_frequency>
     </plugin>
-
+    
+    <plugin filename="gz-sim-sensors-system" name="gz::sim::systems::Sensors">
+        <render_engine>ogre2</render_engine>
+    </plugin>
+    
     <plugin filename="gz-sim-joint-state-publisher-system" 
             name="gz::sim::systems::JointStatePublisher">
         <topic>/joint_states</topic>      
     </plugin>
   </gazebo>
   
-<gazebo reference="left_wheel">
+  <gazebo reference="left_wheel">
     <mu1>1.0</mu1>
     <mu2>1.0</mu2>
     <kp>1000000.0</kp>
@@ -65,6 +69,39 @@
     <mu2>0.001</mu2>
     <kp>1000000.0</kp>
     <kd>1.0</kd>
+  </gazebo>
+
+
+
+  <gazebo reference="camera_link">
+    <sensor name="camera" type="camera">
+      <camera>
+        <horizontal_fov>1.3962634</horizontal_fov>
+        <image>
+          <width>640</width>
+          <height>480</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>15</far>
+        </clip>
+        <noise>
+          <type>gaussian</type>
+          <!-- Noise is sampled independently per pixel on each frame.
+               That pixel's noise value is added to each of its color
+               channels, which at that point lie in the range [0,1]. -->
+          <mean>0.0</mean>
+          <stddev>0.007</stddev>
+        </noise>
+        <optical_frame_id>camera_link_optical</optical_frame_id>
+        <camera_info_topic>camera/camera_info</camera_info_topic>
+      </camera>
+      <always_on>1</always_on>
+      <update_rate>20</update_rate>
+      <visualize>true</visualize>
+      <topic>camera/image</topic>
+    </sensor>
   </gazebo>
 
 </robot>
