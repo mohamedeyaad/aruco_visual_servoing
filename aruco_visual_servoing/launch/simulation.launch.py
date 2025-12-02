@@ -14,7 +14,7 @@ def generate_launch_description():
     pkg_ros_gz_sim = get_package_share_directory('ros_gz_sim')
 
     # Get the path to the URDF file
-    robot_description_file = os.path.join(pkg_aruco_visual_servoing, 'urdf', 'aruco_bot_diff.xacro')
+    robot_description_file = os.path.join(pkg_aruco_visual_servoing, 'urdf', 'aruco_bot_skid_steer.xacro')
 
     # Parse the URDF file using xacro
     robot_description_config = xacro.process_file(robot_description_file)
