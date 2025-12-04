@@ -1,0 +1,3 @@
+aruco_dict: DICT_ARUCO_ORIGINAL
+markers:
+  front: 2
