@@ -25,7 +25,7 @@ def generate_launch_description():
         package='robot_state_publisher',
         executable='robot_state_publisher',
         output='screen',
-        parameters=[robot_description] # Pass the robot description to the node
+        parameters=[robot_description, {'use_sim_time': True}] # Pass the robot description to the node
     )
 
     # Include the Gazebo simulation launch file
@@ -48,6 +48,7 @@ def generate_launch_description():
         executable='rviz2',
         name='rviz2',
         arguments=['-d', os.path.join(pkg_aruco_visual_servoing, 'rviz', 'aruco_visual_servoing.rviz')],
+        parameters=[{'use_sim_time': True}]
     )
 
     # Spawn Robot in Gazebo
@@ -79,6 +80,7 @@ def generate_launch_description():
         executable='parameter_bridge',
         parameters=[{
             'config_file': ros_gz_bridge_config,
+            'use_sim_time': True
         }],
         output='screen'
     )
