@@ -6,7 +6,8 @@ import cv2
 import numpy as np
 
 from geometry_msgs.msg import Twist
-from sensor_msgs.msg import Image
+# UPDATED: Imported CompressedImage
+from sensor_msgs.msg import Image, CompressedImage
 from aruco_interfaces.msg import ArucoMarkers
 
 class SequentialArucoChaser(Node):
@@ -37,7 +38,9 @@ class SequentialArucoChaser(Node):
         self.img_pub = self.create_publisher(Image, '/aruco_target_circled', 10)
 
         self.create_subscription(ArucoMarkers, '/aruco_markers', self.aruco_callback, 10)
-        self.create_subscription(Image, '/camera/image_raw', self.image_callback, qos_profile_sensor_data)
+        
+        # UPDATED: Changed message type to CompressedImage
+        self.create_subscription(CompressedImage, '/camera/rgb/image_raw/compressed', self.image_callback, qos_profile_sensor_data)
 
         self.bridge = CvBridge()
         self.get_logger().info("Sequential Chaser Started. Rotating to build map...")
@@ -45,7 +48,8 @@ class SequentialArucoChaser(Node):
     def image_callback(self, msg):
         """Cache image and draw circle only when we are in VISITING state."""
         try:
-            self.current_image = self.bridge.imgmsg_to_cv2(msg, desired_encoding='bgr8')
+            # UPDATED: Used compressed_imgmsg_to_cv2
+            self.current_image = self.bridge.compressed_imgmsg_to_cv2(msg, desired_encoding='bgr8')
             
             # We only publish the circled image when we have successfully reached the marker
             if self.state == "VISITING" and self.current_target_id is not None:
@@ -92,22 +96,17 @@ class SequentialArucoChaser(Node):
                 # Z error = Distance from camera
                 
                 err_x = pose.position.x
-                dist = pose.position.z
 
-                # Rotate to center x
+                # Rotate to center x, but do not drive forward
                 twist.angular.z = -1.0 * err_x * self.center_kp
+                twist.linear.x = 0.0
 
-                # Move forward until distance is 1.0m
-                if dist > self.target_dist:
-                    twist.linear.x = (dist - self.target_dist) * self.distance_kp
-                else:
-                    # We are close enough. Check if we are centered enough.
-                    if abs(err_x) < 0.05:
-                        self.get_logger().info(f"Reached Marker {self.current_target_id}. Pausing.")
-                        self.state = "VISITING"
-                        self.visit_start_time = self.get_clock().now()
-                        twist.linear.x = 0.0
-                        twist.angular.z = 0.0
+                # Treat the target as reached once centered (no forward motion allowed)
+                if abs(err_x) < 0.05:
+                    self.get_logger().info(f"Centered on Marker {self.current_target_id} without moving forward. Pausing.")
+                    self.state = "VISITING"
+                    self.visit_start_time = self.get_clock().now()
+                    twist.angular.z = 0.0
 
             else:
                 # Target not in view? Rotate to find it.
@@ -149,6 +148,7 @@ class SequentialArucoChaser(Node):
         draw_img = self.current_image.copy()
         
         # Detect again purely for 2D drawing coordinates
+        # Note: If you are on OpenCV 4.7+, use cv2.aruco.getPredefinedDictionary(...)
         aruco_dict = cv2.aruco.Dictionary_get(cv2.aruco.DICT_ARUCO_ORIGINAL)
         params = cv2.aruco.DetectorParameters_create()
         corners, ids, _ = cv2.aruco.detectMarkers(draw_img, aruco_dict, parameters=params)
@@ -166,7 +166,8 @@ class SequentialArucoChaser(Node):
                     cv2.circle(draw_img, (cx, cy), 80, (0, 255, 0), 3)
                     cv2.putText(draw_img, f"ID: {self.current_target_id}", (cx - 20, cy - 60),
                                 cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
-     
+      
+        # Note: We still publish as a raw Image because RQT handles raw easier for viewing
         out_msg = self.bridge.cv2_to_imgmsg(draw_img, encoding='bgr8')
         self.img_pub.publish(out_msg)
 
