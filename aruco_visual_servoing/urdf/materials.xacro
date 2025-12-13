@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!--
+  ArUco Visual Servoing - Material Definitions
+  
+  This file defines a standardized set of Gazebo-compatible materials for robot visualization
+  in RViz and Gazebo simulation environments. These materials use RGBA color values where:
+  - R (Red), G (Green), B (Blue): Color channels ranging from 0.0 to 1.0
+  - A (Alpha): Transparency channel, where 1.0 is fully opaque
+  
+  Author: Mohamed Eyad
+  Date: December 12, 2025
+  License: See package.xml for license information
+-->
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- ========================================= -->
+  <!-- Basic Monochrome Materials                -->
+  <!-- ========================================= -->
+  
+  <material name="black">
+    <color rgba="0.0 0.0 0.0 1.0"/>
+  </material>
+
+  <material name="white">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+
+  <material name="grey">
+    <color rgba="0.5 0.5 0.5 1.0"/>
+  </material>
+
+  <material name="silver">
+    <color rgba="0.75 0.75 0.75 1.0"/>
+  </material>
+
+  <!-- ========================================= -->
+  <!-- Primary Color Materials                   -->
+  <!-- ========================================= -->
+  
+  <material name="red">
+    <color rgba="0.8 0.0 0.0 1.0"/>
+  </material>
+
+  <material name="green">
+    <color rgba="0.0 0.8 0.0 1.0"/>
+  </material>
+
+  <material name="blue">
+    <color rgba="0.0 0.0 0.8 1.0"/>
+  </material>
+
+  <!-- ========================================= -->
+  <!-- Secondary Color Materials                 -->
+  <!-- ========================================= -->
+  
+  <material name="orange">
+    <color rgba="1.0 0.423 0.039 1.0"/>
+  </material>
+
+  <material name="brown">
+    <color rgba="0.871 0.812 0.765 1.0"/>
+  </material>
+
+</robot>
