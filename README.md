@@ -66,10 +66,10 @@ For Gazebo to locate the custom ArUco marker models, you must strictly add the `
 Run this command in your terminal before launching the simulation (or add it to your `~/.bashrc`):
 
 ```bash
-export $GZ_SIM_RESOURCE_PATH=/home/@Username/ros2_ws/src/aruco_visual_servoing/aruco_visual_servoing/models
+export GZ_SIM_RESOURCE_PATH=home/$USER/ros2_ws/src/aruco_visual_servoing/aruco_visual_servoing/models
 ```
 
-*Note: Replace `@Username` with your actual username. Ensure the path points to the folder containing `aruco_marker_0`, `aruco_marker_1`, etc.*
+*Note: Ensure the path points to the folder containing `aruco_marker_0`, `aruco_marker_1`, etc.*
 
 ## 📐 Custom Interfaces
 
@@ -97,7 +97,7 @@ ros2 launch aruco_visual_servoing simulation.launch.py
 
 ### 2. Launch the Detector & Controller
 
-Start the main visual servoing logic using the provided launch file:
+Start the ArUco detector node, and the main visual servoing logic using the provided launch file:
 
 ```bash
 ros2 launch aruco_visual_servoing servoing.launch.py
