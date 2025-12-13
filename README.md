@@ -20,6 +20,14 @@ This package provides a complete visual servoing pipeline for a mobile robot in 
 * **Visual Feedback:** Publishes a debug topic `/aruco_target_circled` highlighting the active target in real-time.
 * **Simulation Ready:** Includes a custom Gazebo world with a circular array of markers and a URDF robot model.
 
+## 🤖 Real Robot Deployment
+
+The control logic was successfully deployed on a **Husarion ROSbot 2**.
+
+[![ArUco Chaser Demo](https://img.youtube.com/vi/YOUR_VIDEO_ID_HERE/0.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID_HERE)
+
+*Click the image above to watch the simulation in action.*
+
 ## 🛠️ Tech Stack
 
 * **Framework:** ROS 2 Jazzy
