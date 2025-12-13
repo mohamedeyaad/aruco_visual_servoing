@@ -1,16 +1,14 @@
 <?xml version="1.0"?>
 <!--
-  ArUco Visual Servoing - Differential Drive Robot URDF
+  ArUco Visual Servoing - Skid-Steer Drive Robot URDF
   
-  This file defines the complete kinematic and dynamic structure of a differential drive
+  This file defines the complete kinematic and dynamic structure of a skid-steer drive
   mobile robot equipped with an onboard camera for ArUco marker-based visual servoing.
-  The model includes a base chassis, two independently actuated wheels, a caster wheel for
-  stability, and a mounted camera with proper optical frame alignment.
+  The model includes a base chassis, four independently actuated wheels, and a mounted camera with proper optical frame alignment.
   
   Robot Features:
-  - Differential drive locomotion with independent left/right wheel control
+  - Skid-steer drive locomotion with independent wheel control
   - Camera system with optical frame transformation
-  - Caster wheel for stability on uneven surfaces
   - Complete inertial properties for physics simulation
   
   Author: Mohamed Eyad
