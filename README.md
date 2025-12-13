@@ -24,7 +24,7 @@ This package provides a complete visual servoing pipeline for a mobile robot in 
 
 The control logic was successfully deployed on a **Husarion ROSbot 2**.
 
-[![ArUco Chaser Demo](https://img.youtube.com/vi/YOUR_VIDEO_ID_HERE/0.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID_HERE)
+[![ArUco Chaser Demo](https://img.youtube.com/vi/FSaDam3q0-Y/0.jpg)](https://youtu.be/FSaDam3q0-Y)
 
 *Click the image above to watch the simulation in action.*
 
