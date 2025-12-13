@@ -20,39 +20,36 @@ This package provides a complete visual servoing pipeline for a mobile robot in 
 * **Visual Feedback:** Publishes a debug topic `/aruco_target_circled` highlighting the active target in real-time.
 * **Simulation Ready:** Includes a custom Gazebo world with a circular array of markers and a URDF robot model.
 
-## 🤖 Real Robot Deployment
+## 🎥 Demonstrations
 
-The control logic was successfully deployed on a **Husarion ROSbot 2**.
+### 1. Simulation: Differential Drive & Skid-Steer
+A comprehensive demonstration of the autonomous behavior in Gazebo Harmonic. This video showcases the modularity of the code by running it first on a **Differential Drive** robot and then on a **Skid-Steer (4-wheel)** variant.
 
-[![ArUco Chaser Demo](https://img.youtube.com/vi/FSaDam3q0-Y/0.jpg)](https://youtu.be/FSaDam3q0-Y)
+[![Simulation Demo](https://img.youtube.com/vi/t_qJ0Mu8LlE/0.jpg)](https://youtu.be/t_qJ0Mu8LlE)
 
-*Click the image above to watch the simulation in action.*
+### 2. Real Robot Deployment (ROSbot 2)
+The control logic was successfully deployed on a physical **Husarion ROSbot 2** to demonstrate Sim-to-Real transfer.
+
+[![Real Robot Demo](https://img.youtube.com/vi/kGFVGT41RqY/0.jpg)](https://youtu.be/kGFVGT41RqY)
 
 ## 🛠️ Tech Stack
 
 * **Framework:** ROS 2 Jazzy
 * **Simulation:** Gazebo Harmonic (GZ Sim)
 * **Language:** Python 3.10+
-* **Libraries:** `opencv-python`, `cv_bridge`, `ros2_aruco`
+* **Libraries:** `opencv-python`, `cv_bridge`
 * **Middleware:** `ros_gz_bridge`
 
 ## ⚙️ Installation
 
 ### Prerequisites
-Ensure you have **ROS 2 Jazzy** and **Gazebo Harmonic** installed. This package depends on the `ros2_aruco` package from JMU-ROBOTICS-VIVA for marker detection.
-
-```bash
-# Clone the specific ArUco dependency
-cd ~/ros2_ws/src
-git clone https://github.com/JMU-ROBOTICS-VIVA/ros2_aruco.git
-````
+Ensure you have **ROS 2 Jazzy** and **Gazebo Harmonic** installed. 
 
 ### Build
-
-Clone this repository and build the workspace:
+Clone this repository and build the workspace. Note that this repository contains two packages: the main `aruco_visual_servoing` and the custom message interface `aruco_interfaces`.
 
 ```bash
-# Clone this package
+# Clone the repository
 cd ~/ros2_ws/src
 git clone https://github.com/mohamedeyaad/aruco_visual_servoing.git
 
@@ -62,9 +59,35 @@ colcon build --symlink-install
 source install/setup.bash
 ```
 
+### ⚠️ Environment Setup (Important)
+
+For Gazebo to locate the custom ArUco marker models, you must strictly add the `models` directory to the `GZ_SIM_RESOURCE_PATH`.
+
+Run this command in your terminal before launching the simulation (or add it to your `~/.bashrc`):
+
+```bash
+export GZ_SIM_RESOURCE_PATH=/home/@Username/ros2_ws/src/aruco_visual_servoing/aruco_visual_servoing/models
+```
+
+*Note: Replace `@Username` with your actual username. Ensure the path points to the folder containing `aruco_marker_0`, `aruco_marker_1`, etc.*
+
+## 📐 Custom Interfaces
+
+This project uses a custom message definition to handle detected marker data efficiently.
+
+**Package:** `aruco_interfaces`
+**File:** `msg/ArucoMarkers.msg`
+
+```text
+std_msgs/Header header
+
+int64[] marker_ids
+geometry_msgs/Pose[] poses
+```
+
 ## 🚀 Usage
 
-### 1\. Launch Simulation
+### 1. Launch Simulation
 
 This brings up the Gazebo environment, spawns the robot, and establishes the ROS-GZ bridges.
 
@@ -72,50 +95,50 @@ This brings up the Gazebo environment, spawns the robot, and establishes the ROS
 ros2 launch aruco_visual_servoing simulation.launch.py
 ```
 
-### 2\. Launch the Detector & Controller
+### 2. Launch the Detector & Controller
 
-Start the main visual servoing logic:
+Start the main visual servoing logic using the provided launch file:
 
 ```bash
 ros2 launch aruco_visual_servoing servoing.launch.py
+```
+
+## 🌿 Branches & Variants
+
+### Skid-Steer Variant
+
+A simulation branch implementing 4-wheel skid-steer kinematics.
+
+```bash
+git checkout skid-steer
+colcon build
+```
+
+### Real Robot Deployment (ROSbot 2)
+
+A dedicated branch for deployment on the **Husarion ROSbot 2**. This branch features adapted topics and configurations specifically for the physical robot's hardware interface.
+
+```bash
+git checkout real-robot-deploy
+colcon build
 ```
 
 ## 🧠 Architecture
 
 The core logic (`visual_servoing_node.py`) implements a Finite State Machine (FSM):
 
-1.  **SEARCHING:** The robot performs a 360° scan to populate a set of unique marker IDs.
-2.  **ALIGNING:**
-      * **Angular Control:** Minimizes the horizontal error (x-offset) of the marker in the camera frame.
-      * **Linear Control:** Minimizes the depth error to maintain a 1.0m standoff distance.
-3.  **VISITING:** The robot pauses at the target, verifies the ID, and creates a visual overlay before proceeding to the next target in the sequence.
-
-## 🚙 Skid-Steer Variant
-
-This package supports different kinematic configurations. A **Skid-Steer (4-wheel)** implementation is available in a separate branch. This variant replaces the differential drive controller with a skid-steer plugin and updates the URDF to a 4-wheel chassis.
-
-**To use the skid-steer robot:**
-
-1.  Switch branches:
-    ```bash
-    git checkout skid-steer
-    ```
-2.  Rebuild the package (necessary to update robot description and plugins):
-    ```bash
-    colcon build
-    source install/setup.bash
-    ```
-3.  Launch normally:
-    ```bash
-    ros2 launch aruco_visual_servoing simulation.launch.py
-    ```
+1. **SEARCHING:** The robot performs a 360° scan to populate a set of unique marker IDs.
+2. **ALIGNING:**
+   * **Angular Control:** Minimizes the horizontal error (x-offset) of the marker in the camera frame.
+   * **Linear Control:** Minimizes the depth error to maintain a 1.0m standoff distance.
+3. **VISITING:** The robot pauses at the target, verifies the ID, and creates a visual overlay before proceeding to the next target in the sequence.
 
 ## 📦 Topics
 
 | Topic | Type | Description |
-| :--- | :--- | :--- |
+| --- | --- | --- |
 | `/cmd_vel` | `geometry_msgs/Twist` | Velocity commands sent to the robot controller |
-| `/aruco_markers` | `ros2_aruco_interfaces/ArucoMarkers` | Detected marker poses and IDs |
+| `/aruco_markers` | `aruco_interfaces/msg/ArucoMarkers` | Detected marker poses and IDs (Custom Msg) |
 | `/aruco_target_circled` | `sensor_msgs/Image` | Processed camera feed with target highlights |
 | `/camera/image_raw` | `sensor_msgs/Image` | Raw camera stream from Gazebo |
 
@@ -123,20 +146,31 @@ This package supports different kinematic configurations. A **Skid-Steer (4-whee
 
 ```text
 aruco_visual_servoing/
-├── config/
-│   └── ros_gz_bridge.yaml       # Bridge configuration for topics
-├── launch/
-│   └── simulation.launch.py     # Main launch file
-├── rviz/
-│   └── aruco_visual_servoing.rviz
-├── urdf/
-│   ├── aruco_bot_diff.xacro     # Main robot description
-│   ├── aruco_bot_diff.gazebo.xacro # Gazebo plugins
-│   └── materials.xacro          # Color definitions
-├── worlds/
-│   └── aruco_world.world        # Gazebo world with 5 markers
-├── aruco_visual_servoing/
-│   └── test.py                  # Main Python Control Node
-├── package.xml
-└── setup.py
+├── aruco_interfaces/                # Custom Message Package
+│   ├── msg/
+│   │   └── ArucoMarkers.msg         # Custom marker definition
+│   ├── CMakeLists.txt
+│   └── package.xml
+├── aruco_visual_servoing/           # Main Package
+│   ├── aruco_visual_servoing/
+│   │   ├── aruco_detector_node.py   # Custom ArUco detection logic
+│   │   ├── aruco_generate_markers.py
+│   │   ├── visual_servoing_node.py  # Main Control Node (FSM)
+│   │   └── __init__.py
+│   ├── config/
+│   │   ├── aruco_params.yaml
+│   │   └── ros_gz_bridge.yaml
+│   ├── launch/
+│   │   ├── servoing.launch.py
+│   │   └── simulation.launch.py
+│   ├── models/                      # Custom SDF models
+│   │   ├── aruco_marker_0/
+│   │   ├── aruco_marker_1/
+│   │   └── ...
+│   ├── rviz/
+│   │   └── aruco_visual_servoing.rviz
+│   ├── package.xml
+│   └── setup.py
+
 ```
+
