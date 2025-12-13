@@ -7,7 +7,7 @@ import numpy as np
 
 from sensor_msgs.msg import CameraInfo, Image
 from geometry_msgs.msg import Pose
-from ros2_aruco_interfaces.msg import ArucoMarkers
+from aruco_interfaces.msg import ArucoMarkers
 from rcl_interfaces.msg import ParameterDescriptor, ParameterType
 
 class ArucoNode(Node):

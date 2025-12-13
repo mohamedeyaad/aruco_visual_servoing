@@ -7,7 +7,7 @@ import numpy as np
 
 from geometry_msgs.msg import Twist
 from sensor_msgs.msg import Image
-from ros2_aruco_interfaces.msg import ArucoMarkers
+from aruco_interfaces.msg import ArucoMarkers
 
 class SequentialArucoChaser(Node):
     def __init__(self):
