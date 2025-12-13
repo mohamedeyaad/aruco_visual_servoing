@@ -211,6 +211,11 @@ class ArucoNode(rclpy.node.Node):
                     corners, self.marker_size, self.intrinsic_mat, self.distortion
                 )
             for i, marker_id in enumerate(marker_ids):
+                # --- ADDED FILTER HERE ---
+                # If the detected marker ID is 0, skip this iteration
+                if marker_id[0] == 0:
+                    continue
+                # -------------------------
                 pose = Pose()
                 pose.position.x = tvecs[i][0][0]
                 pose.position.y = tvecs[i][0][1]
