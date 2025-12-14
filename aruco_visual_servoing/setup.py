@@ -22,8 +22,8 @@ setup(
     zip_safe=True,
     maintainer='Mohamed Eyad',
     maintainer_email='mooeyad@gmail.com',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    description='Autonomous visual servoing with ArUco detection, Gazebo assets, and ROS 2 launch files.',
+    license='Apache-2.0',
     extras_require={
         'test': [
             'pytest',
