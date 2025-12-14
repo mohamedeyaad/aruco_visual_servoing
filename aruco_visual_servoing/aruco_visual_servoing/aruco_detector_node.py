@@ -15,9 +15,9 @@ class ArucoNode(Node):
         super().__init__('aruco_node')
 
         # --- Parameters (Matching your YAML) ---
-        self.declare_parameter("marker_size", 0.0625, 
+        self.declare_parameter("marker_size", 0.4, 
                                ParameterDescriptor(type=ParameterType.PARAMETER_DOUBLE))
-        self.declare_parameter("aruco_dictionary_id", "DICT_5X5_250", 
+        self.declare_parameter("aruco_dictionary_id", "DICT_ARUCO_ORIGINAL", 
                                ParameterDescriptor(type=ParameterType.PARAMETER_STRING))
         self.declare_parameter("image_topic", "/camera/image_raw", 
                                ParameterDescriptor(type=ParameterType.PARAMETER_STRING))
@@ -54,7 +54,7 @@ class ArucoNode(Node):
 
         if dictionary_id_name not in self.aruco_dict_map:
             self.get_logger().error(f"Unknown dictionary: {dictionary_id_name}. Defaulting to 5X5_250")
-            dictionary_id = cv2.aruco.DICT_5X5_250
+            dictionary_id = cv2.aruco.DICT_ARUCO_ORIGINAL
         else:
             dictionary_id = self.aruco_dict_map[dictionary_id_name]
 

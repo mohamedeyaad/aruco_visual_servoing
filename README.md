@@ -4,7 +4,7 @@
 
 ![ROS 2 Jazzy](https://img.shields.io/badge/ROS_2-Jazzy-blue)
 ![Gazebo Harmonic](https://img.shields.io/badge/Gazebo-Harmonic-orange)
-![License](https://img.shields.io/badge/License-MIT-green)
+![License](https://img.shields.io/badge/License-Apache_2.0-blue)
 
 ## 📖 Overview
 
@@ -70,7 +70,7 @@ For Gazebo to locate the custom ArUco marker models, you must strictly add the `
 Run this command in your terminal before launching the simulation (or add it to your `~/.bashrc`):
 
 ```bash
-export GZ_SIM_RESOURCE_PATH=home/$USER/ros2_ws/src/aruco_visual_servoing/aruco_visual_servoing/models
+export GZ_SIM_RESOURCE_PATH=/home/$USER/ros2_ws/src/aruco_visual_servoing/aruco_visual_servoing/models
 ```
 
 *Note: Ensure the path points to the folder containing `aruco_marker_0`, `aruco_marker_1`, etc.*
