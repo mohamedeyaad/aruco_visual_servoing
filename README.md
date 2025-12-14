@@ -10,15 +10,19 @@
 
 This package provides a complete visual servoing pipeline for a mobile robot in a simulated environment. The system enables a differential drive robot to autonomously identify multiple ArUco markers, sort them by ID, and sequentially visit them. It utilizes a Proportional (P) controller for precise alignment and distance keeping, bridging the gap between perception (OpenCV) and actuation (ROS 2 Control).
 
+**Documentation:** https://deepwiki.com/mohamedeyaad/aruco_visual_servoing
+
 ## ✨ Key Features
 
 * **Autonomous Exploration:** Rotates to scan the environment and build a map of available ArUco markers.
 * **Sequential Chasing:** Automatically sorts detected markers and visits them in ascending numerical order.
+* **Custom Simulation Environment:**
+    * Generated 5 unique ArUco marker images.
+    * Created custom SDF models by mapping these textures onto box geometries to create distinct targets in Gazebo.
 * **Visual Servoing Control:**
     * **Angular:** Aligns the robot's heading to the marker's center.
     * **Linear:** Approaches the target to a precise distance of 1.0 meter.
 * **Visual Feedback:** Publishes a debug topic `/aruco_target_circled` highlighting the active target in real-time.
-* **Simulation Ready:** Includes a custom Gazebo world with a circular array of markers and a URDF robot model.
 
 ## 🎥 Demonstrations
 
