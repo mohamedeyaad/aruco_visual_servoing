@@ -33,6 +33,7 @@ setup(
         'console_scripts': [
             'aruco_visual_servoing_node = aruco_visual_servoing.visual_servoing_node:main',
             'aruco_detector_node = aruco_visual_servoing.aruco_detector_node:main',
+            'aruco_visual_servoing_node_no_forward = aruco_visual_servoing.visual_servoing_node_no_forward:main',
         ],
     },
 )
